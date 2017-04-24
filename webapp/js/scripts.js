@@ -43,18 +43,23 @@ function addQuestion(e) {
   e.preventDefault();
 
   var queryString = $("form[name=question]").serialize();
+  var nextPath = '/';
 
   $.ajax({
     type : 'post',
     url : '/api/qna/addQuestion',
     data : queryString,
     dataType : 'json',
-    error: function onError(e) {
-      console.log(e);
-    },
+    error: onError,
     success : function onSuccess(json, status){
       console.log(json, status);
-      window.location.replace('/');
+
+      if (json.error==='Unauthorized') {
+        window.alert('로그인 후 질문하세요');
+        nextPath = '/users/loginForm';
+      }
+
+      window.location.replace(nextPath);
     }
     ,
   })
