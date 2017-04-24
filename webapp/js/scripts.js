@@ -36,3 +36,26 @@ String.prototype.format = function() {
         ;
   });
 };
+
+// 질문하기
+$('.addQuestion button[type=submit]').click(addQuestion);
+function addQuestion(e) {
+  e.preventDefault();
+
+  var queryString = $("form[name=question]").serialize();
+
+  $.ajax({
+    type : 'post',
+    url : '/api/qna/addQuestion',
+    data : queryString,
+    dataType : 'json',
+    error: function onError(e) {
+      console.log(e);
+    },
+    success : function onSuccess(json, status){
+      console.log(json, status);
+      window.location.replace('/');
+    }
+    ,
+  })
+}
