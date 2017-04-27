@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import next.model.Question;
 import next.model.User;
 
+import java.lang.reflect.Field;
+
 public class ReflectionTest {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionTest.class);
 
@@ -23,8 +25,21 @@ public class ReflectionTest {
     }
     
     @Test
-    public void privateFieldAccess() {
+    public void privateFieldAccess() throws NoSuchFieldException, IllegalAccessException, InstantiationException {
         Class<Student> clazz = Student.class;
         logger.debug(clazz.getName());
+
+        Field nameField = clazz.getDeclaredField("name");
+        Field ageField = clazz.getDeclaredField("age");
+
+        nameField.setAccessible(true);
+        ageField.setAccessible(true);
+
+        Student student = clazz.newInstance();
+
+        nameField.set(student, "Alice");
+        ageField.set(student, 20);
+        logger.debug(student.getName());
+        logger.debug(String.valueOf(student.getAge()));
     }
 }
