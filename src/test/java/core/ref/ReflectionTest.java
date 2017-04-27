@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import next.model.Question;
 import next.model.User;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 public class ReflectionTest {
@@ -19,13 +20,19 @@ public class ReflectionTest {
     }
     
     @Test
-    public void newInstanceWithConstructorArgs() {
+    public void newInstanceWithConstructorArgs() throws Exception {
         Class<User> clazz = User.class;
         logger.debug(clazz.getName());
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+        User user = (User) constructors[0].newInstance(new Object[]{"id1", "password1", "name1", "email1"});
+        logger.debug(user.getUserId());
+        logger.debug(user.getPassword());
+        logger.debug(user.getName());
+        logger.debug(user.getEmail());
     }
     
     @Test
-    public void privateFieldAccess() throws NoSuchFieldException, IllegalAccessException, InstantiationException {
+    public void privateFieldAccess() throws Exception {
         Class<Student> clazz = Student.class;
         logger.debug(clazz.getName());
 
